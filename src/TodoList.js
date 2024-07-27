@@ -24,11 +24,18 @@ class TodoList extends Component {
             // <div><input /><button>提交</button></div>
             // ❗️❗️❗️貌似应该这样写，但……请保存代码查看页面报错！
             <Fragment>
-                <div><input value={this.state.inputValue} onChange={this.handleInputChange.bind(this)} /><button>提交</button></div>
+                <div>
+                    <input value={this.state.inputValue} onChange={this.handleInputChange.bind(this)} />
+                    <button onClick={this.handleBtnClick.bind(this)}>提交</button>
+                </div>
                 <ul>
-                    <li>React 初识</li>
-                    <li>React 入门</li>
-                    <li>React 进阶</li>
+                    {
+                        this.state.list.map((item, index) => {
+                            return (
+                                <li key={index}>{item}{index}</li>
+                            )
+                        })
+                    }
                 </ul>
             </Fragment>
         )
@@ -37,9 +44,18 @@ class TodoList extends Component {
 
     //但输入框内的数值发生变化的 时候，我们就开始执行函数
     handleInputChange(e) {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         // console.log(this)
-
+        this.setState({
+            inputValue: e.target.value
+        })
+    }
+    handleBtnClick() {
+        // 手动存储到store, store发生变化，自动更新页面
+        this.setState({
+            list: [...this.state.list, this.state.inputValue],
+            inputValue: ''
+        })
     }
 }
 
