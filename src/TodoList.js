@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 
-
+import "./style.css"; // 3️⃣-①：将当前目录下的 CSS 样式引入；
+import TodoItem from "./TodoItem";
 //传统的类编程
 class TodoList extends Component {
 
@@ -25,16 +26,44 @@ class TodoList extends Component {
             // ❗️❗️❗️貌似应该这样写，但……请保存代码查看页面报错！
             <Fragment>
                 <div>
-                    <input value={this.state.inputValue} onChange={this.handleInputChange.bind(this)} />
+
+                    <label htmlFor="insertArea">请输入要进行的事项：</label>
+                    {/* ❌1️⃣根据前置知识，我们貌似能很快写出满足需求的代码； */}
+                    <input
+                        id="insertArea"
+
+                        className="input"
+                        value={this.state.inputValue}
+                        onChange={this.handleInputChange.bind(this)}
+                    />
                     <button onClick={this.handleBtnClick.bind(this)}>提交</button>
                 </div>
-                <ul onClick={this.handleItemDelete.bind(this)}>
+                {/* <ul onClick={this.handleItemDelete.bind(this)}>
                     {this.state.list.map((item, index) => (
                         <li key={index} data-index={index}>{item} {index}</li>
                     ))}
+                </ul> */}
+                <ul>
+                    {this.getTodoItem()}
                 </ul>
+
             </Fragment>
         )
+    }
+
+
+    getTodoItem() {
+        return this.state.list.map((item, index) => {
+            return (
+                <TodoItem
+                    key={index}
+
+                    content={item}
+                    index={index}
+                    itemDelete={this.handleItemDelete1.bind(this)}
+                />
+            )
+        })
     }
 
 
@@ -54,7 +83,7 @@ class TodoList extends Component {
         })
     }
 
-    //删除某一项
+    //删除某一项,(对于事件委托)
     handleItemDelete(e) {
         // 事件委托：判断点击的是否是 li 元素
         if (e.target.tagName.toLowerCase() === 'li') {
@@ -66,6 +95,23 @@ class TodoList extends Component {
             });
         }
     }
+
+
+    //监听每一个元素项
+    handleItemDelete1(index) {
+        const list = [...this.state.list]
+        /*
+        ❎-⑨：用 prevState 来代替
+     数据“修改前”的状态；
+                */
+
+        list.splice(index, 1)
+        this.setState({ // ❎-⑧：新版 React 提倡我们用“传入函数”的形式修改“数据项”；
+            list: list
+        }
+        )
+    }
+
 }
 
 export default TodoList;

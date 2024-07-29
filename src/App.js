@@ -5,7 +5,7 @@ function App() {
   return (
     <Fragment>
       <TodoList />
-      <CP />
+      {/* <CP /> */}
     </Fragment>
   );
 }
