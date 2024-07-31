@@ -23,18 +23,19 @@ class TodoList extends Component {
 
             // 🚀有个 input 框，后边紧跟一个“提交”按钮。
             // <div><input /><button>提交</button></div>
-            // ❗️❗️❗️貌似应该这样写，但……请保存代码查看页面报错！
             <Fragment>
                 <div>
 
                     <label htmlFor="insertArea">请输入要进行的事项：</label>
-                    {/* ❌1️⃣根据前置知识，我们貌似能很快写出满足需求的代码； */}
+                    {/*  */}
                     <input
                         id="insertArea"
 
                         className="input"
                         value={this.state.inputValue}
                         onChange={this.handleInputChange.bind(this)}
+
+                        onKeyDown={this.handleKeyDown.bind(this)}
                     />
                     <button onClick={this.handleBtnClick.bind(this)}>提交</button>
                 </div>
@@ -56,7 +57,7 @@ class TodoList extends Component {
         return this.state.list.map((item, index) => {
             return (
                 <TodoItem
-                    key={index}
+                    key={item}
 
                     content={item}
                     index={index}
@@ -75,7 +76,17 @@ class TodoList extends Component {
             inputValue: e.target.value
         })
     }
+
+    handleKeyDown(e) {
+
+        if (e.key === 'Enter') {
+            this.handleBtnClick()
+        }
+    }
+
     handleBtnClick() {
+
+        // console.log('1')
         // 手动存储到store, store发生变化，自动更新页面
         this.setState({
             list: [...this.state.list, this.state.inputValue],
@@ -100,10 +111,7 @@ class TodoList extends Component {
     //监听每一个元素项
     handleItemDelete1(index) {
         const list = [...this.state.list]
-        /*
-        ❎-⑨：用 prevState 来代替
-     数据“修改前”的状态；
-                */
+        /*❎-⑨：用 prevState 来代替  数据“修改前”的状态； */
 
         list.splice(index, 1)
         this.setState({ // ❎-⑧：新版 React 提倡我们用“传入函数”的形式修改“数据项”；
